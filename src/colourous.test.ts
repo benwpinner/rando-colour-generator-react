@@ -111,7 +111,7 @@ test('get hex hue list, pass in string array, returns appropriate hues', () => {
   });
 });
 
-test('get hue list, pass in string array, returns appropriate rgb strings', () => {
+test('get rgb from hue list, pass in string array, returns appropriate rgb strings', () => {
   const hueLists = [
     ['125', '24', '255'],
     ['34', '245', '120'],
@@ -129,6 +129,22 @@ test('get hue list, pass in string array, returns appropriate rgb strings', () =
   });
   colours.forEach((colour, colourInd) => {
     expect(colour).toEqual(expectedColours[colourInd]);
+  });
+});
+
+test('get rgb from hue list, pass in invalid values, throws appropriate error', () => {
+  const hueLists = [
+    ['125', '24', '265'],
+    ['34', '285', '120'],
+    ['100', '400', '200'],
+    ['397', '147', '198'],
+  ];
+  hueLists.forEach((colour, colourInd) => {
+    expect(() => {
+      colourous.getRGBFromHueList(colour);
+    }).toThrow(
+      'One or more of the rgb values are outside the accepted range. Each number must be within 0-255'
+    );
   });
 });
 
@@ -183,7 +199,6 @@ test('convert hex to rgb, pass in hex hue list, returns appropriate rgb hue list
     ['56', '147', '198'],
   ];
   const colours: string[][] = hueLists.map((val) => {
-    debugger;
     return colourous.convertHexToRGB(val);
   });
   colours.forEach((colour, colourInd) => {
@@ -203,6 +218,39 @@ test('convert hex to rgb, pass in out of range values, throws appropriate error'
       colourous.convertHexToRGB(colour);
     }).toThrow(
       'One or more of the values passed was not a valid hexadecimal hue value. Only 0-9 and A-F characters are allowed, and only 2 digits for each hue value is allowed'
+    );
+  });
+});
+
+test('calculate luminance, pass in rgb hue list, returns appropriate luminances', () => {
+  const hueLists = [
+    ['125', '24', '255'],
+    ['34', '245', '120'],
+    ['100', '24', '200'],
+    ['56', '147', '198'],
+  ];
+
+  const expectedLuminances = [0.12, 0.67, 0.08, 0.26];
+  const luminances: number[] = hueLists.map((val) => {
+    return colourous.calculateLuminance(val);
+  });
+  luminances.forEach((luminance, colourInd) => {
+    expect(luminance).toEqual(expectedLuminances[colourInd]);
+  });
+});
+
+test('calculate luminance, pass in out of range values, throws appropriate error', () => {
+  const hueLists = [
+    ['267', '24', '255'],
+    ['300', '245', '120'],
+    ['100', '24', '457'],
+    ['342', '147', '198'],
+  ];
+  hueLists.forEach((hueList) => {
+    expect(() => {
+      colourous.calculateLuminance(hueList);
+    }).toThrow(
+      'One or more of the values provided was out of range. The range for rgb values is 0-255'
     );
   });
 });
