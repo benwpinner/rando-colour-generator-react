@@ -1,4 +1,4 @@
-interface Colour {
+export interface Colour {
   rgb: string[];
   hex: string[];
   luminance?: number;
