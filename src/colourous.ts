@@ -125,6 +125,10 @@ class Colourous {
    * @author Ben Pinner
    */
   getRGBFromHueList(colour: string[]): string {
+    if (colour.find((val) => +val > 255 || +val < 0))
+      throw new Error(
+        'One or more of the rgb values are outside the accepted range. Each number must be within 0-255'
+      );
     return `rgb(${colour.map((val) => this._round(+val)).join(`,`)})`;
   }
 
@@ -199,8 +203,6 @@ class Colourous {
     return { rgb, hex };
   }
 
-  // const [backgroundTints, backgroundShades] = generateShadesTints();
-
   // if R <= 10 then Rg = R/3294, else Rg = (R/269 + 0.0513)^2.4
 
   // if G <= 10 then Gg = G/3294, else Gg = (G/269 + 0.0513)^2.4
@@ -210,19 +212,22 @@ class Colourous {
   // L = 0.2126 * Rg + 0.7152 * Gg + 0.0722 * Bg
 
   /**
-   * Calculates the relative luminance of any colour passed in
-   * @param {string | string[]} colour The colour to calculate the relative luminance of
-   * @returns {number} The relative luminance of the colour passed in
+   * Calculates the luminance of any colour passed in
+   * @param {string[]} colour The colour to calculate theluminance of
+   * @returns {number} The luminance of the colour passed in
    * @author Ben Pinner
    */
-  calculateRelativeLuminance(colour: string[]): number {
-    const hueList = this.getHueList(colour);
-    const hueValues = hueList.map((val) =>
+  calculateLuminance(colour: string[]): number {
+    if (colour.find((hue) => +hue > 255))
+      throw new Error(
+        'One or more of the values provided was out of range. The range for rgb values is 0-255'
+      );
+    const hueValues = colour.map((val) =>
       +val <= 10 ? `${+val / 3294}` : `${(+val / 269 + 0.0513) ** 2.4}`
     );
     return this._round(
       0.2126 * +hueValues[0] + 0.7152 * +hueValues[1] + 0.0722 * +hueValues[2],
-      3
+      2
     );
   }
 
@@ -253,19 +258,18 @@ class Colourous {
    * @author Ben Pinner
    */
   generateShadesTints(colour: string[]): Colour[][] {
-    const hueList = this.getHueList(colour);
     const tints = [];
     const shades = [];
     for (let i = 0; i < 9; i++) {
-      const tint = this._generateTint(hueList, (i + 1) / 10);
-      const shade = this._generateShade(hueList, (i + 1) / 10);
+      const tint = this._generateTint(colour, (i + 1) / 10);
+      const shade = this._generateShade(colour, (i + 1) / 10);
       tints.push({
         ...tint,
-        luminance: this.calculateRelativeLuminance(tint.rgb),
+        luminance: this.calculateLuminance(tint.rgb),
       });
       shades.push({
         ...shade,
-        luminance: this.calculateRelativeLuminance(shade.rgb),
+        luminance: this.calculateLuminance(shade.rgb),
       });
     }
 
@@ -274,20 +278,17 @@ class Colourous {
 
   /**
    * Takes two colours and calculates their contrast ratio
-   * @param {string[][]} colours The colours to compare
+   * @param {Colour[]} colours The colours to compare
    * @returns {number} The contrast ratio of the two colours
    * @author Ben Pinner
    */
-  calculateContrastRatio(
-    colours: string[][],
-    luminances: number[] | null = null
-  ) {
-    if (!luminances) {
-      luminances = [
-        this.calculateRelativeLuminance(colours[0]),
-        this.calculateRelativeLuminance(colours[1]),
-      ];
+  calculateContrastRatio(colours: Colour[]): number {
+    if (!colours[0].luminance || !colours[1].luminance) {
+      colours[0].luminance = this.calculateLuminance(colours[0].rgb);
+      colours[1].luminance = this.calculateLuminance(colours[1].rgb);
     }
+
+    const luminances = [colours[0].luminance, colours[1].luminance];
 
     return this._round(
       (Math.max(...luminances) + 0.05) / (Math.min(...luminances) + 0.05),
@@ -302,7 +303,7 @@ class Colourous {
    * @author Ben Pinner
    */
   getOppositeColour(colour: string[]) {
-    if (this.calculateRelativeLuminance(colour) > 0.5) {
+    if (this.calculateLuminance(colour) > 0.5) {
       return colour.map((val) => `${Math.abs(225 - +val)}`);
     } else
       return colour.map((val) =>
@@ -349,62 +350,26 @@ class Colourous {
    * @author Ben Pinner
    */
   calculateVariationsAndContrasts(colour: Colour): Colour[][] {
-    const hueList = this.getHueList(colour.rgb).map((hue) => hue);
-
-    const [shades, tints] = this.generateShadesTints(hueList);
+    const [shades, tints] = this.generateShadesTints(colour.rgb);
 
     shades.forEach((shade) => {
       if (colour.luminance && shade.luminance) {
-        shade.contrast = this.calculateContrastRatio(
-          [hueList, shade.rgb],
-          [colour.luminance, shade.luminance]
-        );
+        shade.contrast = this.calculateContrastRatio([colour, shade]);
       } else {
         throw new Error('luminance was undefined');
       }
     });
 
     tints.forEach((tint) => {
-      if (colour.luminance && tint.luminance)
-        tint.contrast = this.calculateContrastRatio(
-          [hueList, tint.rgb],
-          [colour.luminance, tint.luminance]
-        );
+      if (colour.luminance && tint.luminance) {
+        tint.contrast = this.calculateContrastRatio([colour, tint]);
+      } else {
+        throw new Error('luminance was undefined');
+      }
     });
-
-    // const shadeContrasts = shades.map((shade) => [
-    //   this.getRGBFromHueList(shade.map((val) => this._round(val))),
-    //   this.calculateContrastRatio([
-    //     hueList,
-    //     shade.map((val) => this._round(val)),
-    //   ]),
-    // ]);
-    // const tintContrasts = tints.map((tint) => [
-    //   this.getRGBFromHueList(tint.map((val) => this._round(val))),
-    //   this.calculateContrastRatio([
-    //     hueList,
-    //     tint.map((val) => this._round(val)),
-    //   ]),
-    // ]);
 
     return [tints, shades];
   }
-
-  // calculateContrasts(colour, shades, tints) {
-  //   const shadeContrasts = shades.map((shade) => [
-  //     shade.map((val) => this._round(val)),
-  //     this.calculateContrastRatio([
-  //       colour,
-  //       shade.map((val) => this._round(val)),
-  //     ]),
-  //   ]);
-  //   const tintContrasts = tints.map((tint) => [
-  //     tint.map((val) => this._round(val)),
-  //     this.calculateContrastRatio([colour, tint.map((val) => this._round(val))]),
-  //   ]);
-
-  //   return [shadeContrasts, tintContrasts];
-  // }
 
   /**
    * Receives a list of colours, and returns the one with the highest contrast property
