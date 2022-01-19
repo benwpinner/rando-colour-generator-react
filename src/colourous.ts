@@ -133,6 +133,20 @@ class Colourous {
   }
 
   /**
+   * Converts a list of hex hue values, to a string of format `#3fa314`
+   * @param {string[]} colour The list of hue values to convert to a string
+   * @returns {string} The hex string
+   * @author Ben Pinner
+   */
+  getHexFromHueList(colour: string[]): string {
+    if (colour.find((val) => !val.match(/^[0-9a-fA-F][0-9a-fA-F]$/)))
+      throw new Error(
+        'One or more of the rgb values are outside the accepted range. Each number must be within 0-255'
+      );
+    return `#${colour.join('')}`;
+  }
+
+  /**
    * Converts a colour from rgb format to hex format
    * @param {string[]} colour The colour to convert from rgb to hex
    * @returns {string[]} The hex code generated from the rgb code passed in
@@ -352,8 +366,10 @@ class Colourous {
   calculateVariationsAndContrasts(colour: Colour): Colour[][] {
     const [shades, tints] = this.generateShadesTints(colour.rgb);
 
+    console.log('loop');
+
     shades.forEach((shade) => {
-      if (colour.luminance && shade.luminance) {
+      if (colour.luminance !== undefined && shade.luminance !== undefined) {
         shade.contrast = this.calculateContrastRatio([colour, shade]);
       } else {
         throw new Error('luminance was undefined');
@@ -361,7 +377,7 @@ class Colourous {
     });
 
     tints.forEach((tint) => {
-      if (colour.luminance && tint.luminance) {
+      if (colour.luminance !== undefined && tint.luminance !== undefined) {
         tint.contrast = this.calculateContrastRatio([colour, tint]);
       } else {
         throw new Error('luminance was undefined');

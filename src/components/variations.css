@@ -1,0 +1,10 @@
+.variations {
+  position: absolute;
+  top: 0;
+  width: 25%;
+}
+
+.tints {
+  left: 0;
+  transform: translateY(-100%);
+}
