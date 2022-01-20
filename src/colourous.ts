@@ -1,12 +1,3 @@
-export interface Colour {
-  rgb: string[];
-  hex: string[];
-  luminance?: number;
-  contrast?: number;
-  tints?: Colour[];
-  shades?: Colour[];
-}
-
 class Colourous {
   _decToHex = [
     `0`,
@@ -73,14 +64,14 @@ class Colourous {
    * @returns {string[]} Array containing 2 strings: rgb code and hex code
    * @author Ben Pinner
    */
-  generateRandomColour(): Colour {
+  generateRandomColour(): string[][] {
     const colourRGB = [
       `${this._randomInt(0, 255)}`,
       `${this._randomInt(0, 255)}`,
       `${this._randomInt(0, 255)}`,
     ];
     const colourHex = this.convertRGBToHex(colourRGB);
-    return { rgb: colourRGB, hex: colourHex, luminance: undefined };
+    return [colourRGB, colourHex];
   }
 
   /**
@@ -195,13 +186,13 @@ class Colourous {
    * Takes a colour and generates a tint of that colour, the brightness is dictated by the factor passed in
    * @param {string[]} colour List of the rgb values of colour in order
    * @param {number} factor The factor by which you want to lighten the passed in colour
-   * @returns {Colour} The rgb and hex code of the tint generated
+   * @returns {string[]} The rgb and hex code of the tint generated
    * @author Ben Pinner
    */
-  _generateTint(colour: string[], factor: number): Colour {
+  _generateTint(colour: string[], factor: number): string[][] {
     const rgb = colour.map((val) => `${+val + (255 - +val) * factor}`);
     const hex = this.convertRGBToHex(rgb);
-    return { rgb, hex };
+    return [rgb, hex];
   }
 
   /**
@@ -211,10 +202,10 @@ class Colourous {
    * @returns {Colour} The rgb and hex code of the shade generated
    * @author Ben Pinner
    */
-  _generateShade(colour: string[], factor: number): Colour {
+  _generateShade(colour: string[], factor: number): string[][] {
     const rgb = colour.map((val) => `${+val * (1 - factor)}`);
     const hex = this.convertRGBToHex(rgb);
-    return { rgb, hex };
+    return [rgb, hex];
   }
 
   // if R <= 10 then Rg = R/3294, else Rg = (R/269 + 0.0513)^2.4
@@ -254,12 +245,10 @@ class Colourous {
    * @returns {number} The saturation of the colour
    * @author Ben Pinner
    */
-  calculateSaturation(colour: Colour): number {
-    const hueList = this.getHueList(colour.rgb).map((val) => +val);
-    const luminance = colour.luminance;
+  calculateSaturation(colour: string[], luminance: number): number {
+    const hueList = this.getHueList(colour).map((val) => +val);
     const max = Math.max(...hueList);
     const min = Math.min(...hueList);
-    if (luminance === undefined) throw new Error('luminance is undefined');
     return luminance <= 0.5
       ? (max - min) / (max + min)
       : (max - min) / (2 - max - min);
@@ -268,42 +257,29 @@ class Colourous {
   /**
    * Takes a colour and generates a list of tints and a list of shades
    * @param {string[]} colour The colour to generate shades and tints for, either in form `rgb(red,greeb,blue)` or [red,green,blue]
-   * @returns {string[][]} The list of shades and list of tints, each colour also has it's luminance returned
+   * @returns {string[][][][]} The list of shades and list of tints, each colour also has it's luminance returned
    * @author Ben Pinner
    */
-  generateShadesTints(colour: string[]): Colour[][] {
-    const tints = [];
-    const shades = [];
+  generateShadesTints(colour: string[]): string[][][][] {
+    const tints: string[][][] = [];
+    const shades: string[][][] = [];
     for (let i = 0; i < 9; i++) {
       const tint = this._generateTint(colour, (i + 1) / 10);
       const shade = this._generateShade(colour, (i + 1) / 10);
-      tints.push({
-        ...tint,
-        luminance: this.calculateLuminance(tint.rgb),
-      });
-      shades.push({
-        ...shade,
-        luminance: this.calculateLuminance(shade.rgb),
-      });
+      tints.push(tint);
+      shades.push(shade);
     }
 
     return [shades, tints];
   }
 
   /**
-   * Takes two colours and calculates their contrast ratio
-   * @param {Colour[]} colours The colours to compare
+   * Takes luminance values for two colours, and returns the contrast ratio
+   * @param {number[]} luminances The luminances to compare
    * @returns {number} The contrast ratio of the two colours
    * @author Ben Pinner
    */
-  calculateContrastRatio(colours: Colour[]): number {
-    if (!colours[0].luminance || !colours[1].luminance) {
-      colours[0].luminance = this.calculateLuminance(colours[0].rgb);
-      colours[1].luminance = this.calculateLuminance(colours[1].rgb);
-    }
-
-    const luminances = [colours[0].luminance, colours[1].luminance];
-
+  calculateContrastRatio(luminances: number[]): number {
     return this._round(
       (Math.max(...luminances) + 0.05) / (Math.min(...luminances) + 0.05),
       2
@@ -359,48 +335,53 @@ class Colourous {
 
   /**
    * Calculates colour variations (tints and shades) and their contrast ratio with the colour passed in
-   * @param {Colour} colour The colour to calculate variations for
-   * @returns {Object[][]} A list holding the shades and tints lists, each of the format: [rgbString, hexString, contrast]
+   * @param {string[]} colour The colour to calculate variations for
+   * @returns {string[][]} A list holding the shades and tints lists, each of the format: [rgbString, hexString, contrast]
    * @author Ben Pinner
    */
-  calculateVariationsAndContrasts(colour: Colour): Colour[][] {
-    const [shades, tints] = this.generateShadesTints(colour.rgb);
+  // calculateVariationsAndContrasts(colour: string[]): (string[] | number)[] {
+  //   const [shades, tints] = this.generateShadesTints(colour);
 
-    console.log('loop');
+  //   shades.forEach((shade) => {
+  //     if (colour.luminance !== undefined && shade.luminance !== undefined) {
+  //       shade.contrast = this.calculateContrastRatio([colour, shade]);
+  //     } else {
+  //       throw new Error('luminance was undefined');
+  //     }
+  //   });
 
-    shades.forEach((shade) => {
-      if (colour.luminance !== undefined && shade.luminance !== undefined) {
-        shade.contrast = this.calculateContrastRatio([colour, shade]);
-      } else {
-        throw new Error('luminance was undefined');
-      }
-    });
+  //   tints.forEach((tint) => {
+  //     if (colour.luminance !== undefined && tint.luminance !== undefined) {
+  //       tint.contrast = this.calculateContrastRatio([colour, tint]);
+  //     } else {
+  //       throw new Error('luminance was undefined');
+  //     }
+  //   });
 
-    tints.forEach((tint) => {
-      if (colour.luminance !== undefined && tint.luminance !== undefined) {
-        tint.contrast = this.calculateContrastRatio([colour, tint]);
-      } else {
-        throw new Error('luminance was undefined');
-      }
-    });
-
-    return [tints, shades];
-  }
+  //   return [tints, shades];
+  // }
 
   /**
    * Receives a list of colours, and returns the one with the highest contrast property
-   * @param {Colour[]} colours The list of colours to search through
-   * @returns {Colour} The colour selected
+   * @param {string[]} mainColour The colour to contrast against
+   * @param {string[][]} colours The colours to search through
+   * @returns {string[]} The colour selected
    */
-  getHigherContrastColour(colours: Colour[]): Colour {
-    const selectedColour = colours
-      .sort((a: any, b: any) => a.contrast - b.contrast)
-      .find((c: any) => c.contrast > 7);
-    if (!selectedColour)
-      return colours.reduce(
-        (acc: any, c: any) => (c.contrast > acc.contrast ? c : acc),
-        { rgb: [], hex: [], contrast: 0 }
-      );
+  getHigherContrastColour(
+    mainColour: string[],
+    contrastingColours: string[][]
+  ): string[] {
+    const mainLuminance = this.calculateLuminance(mainColour);
+    const contrastRatios = contrastingColours.map((colour) => {
+      const luminance = this.calculateLuminance(colour);
+      return this.calculateContrastRatio([luminance, mainLuminance]);
+    });
+
+    const selectedColour = contrastingColours.reduce(
+      (acc: any, c: any, i: number) =>
+        contrastRatios[i] > acc[1] ? [c, contrastRatios[i]] : acc,
+      ['', 0]
+    )[0];
 
     return selectedColour;
   }
@@ -410,18 +391,18 @@ class Colourous {
    * @param {Colour[]} colours The list of colours to search through
    * @returns {Colour} The colour selected
    */
-  getLowerContrastColour(colours: Colour[]) {
-    const selectedColour = colours
-      .sort((a: any, b: any) => {
-        return a.contrast - b.contrast;
-      })
-      .find((c: any) => {
-        return c.contrast > 7;
-      });
+  // getLowerContrastColour(colours: Colour[]) {
+  //   const selectedColour = colours
+  //     .sort((a: any, b: any) => {
+  //       return a.contrast - b.contrast;
+  //     })
+  //     .find((c: any) => {
+  //       return c.contrast > 7;
+  //     });
 
-    if (!selectedColour) return colours.find((c: any) => c.contrast > 3.5);
+  //   if (!selectedColour) return colours.find((c: any) => c.contrast > 3.5);
 
-    return selectedColour;
-  }
+  //   return selectedColour;
+  // }
 }
 export default new Colourous();

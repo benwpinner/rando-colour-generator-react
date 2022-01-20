@@ -2,9 +2,42 @@
   position: absolute;
   top: 0;
   width: 25%;
+  height: 100vh;
 }
 
 .tints {
   left: 0;
-  transform: translateY(-100%);
+  transform: translateX(-100%);
+}
+
+.shades {
+  right: 0;
+  transform: translateX(100%);
+}
+
+.variations__btn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 2.4rem;
+  font-weight: 500;
+}
+
+svg {
+  height: 3.2rem;
+  width: 3.2rem;
+}
+
+.tints .variations__btn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(100%, -50%);
+}
+
+.shades .variations__btn {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translate(-100%, -50%);
 }

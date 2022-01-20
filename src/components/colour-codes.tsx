@@ -1,12 +1,13 @@
 import './colour-codes.css';
 import { MouseEventHandler } from 'react';
-import colourous, { Colour } from '../colourous';
+import colourous from '../colourous';
 
 interface ColourCodesProps {
-  colour: Colour;
+  rgb: string[];
+  hex: string[];
 }
 
-const ColourCodes: React.FC<ColourCodesProps> = ({ colour: { rgb, hex } }) => {
+const ColourCodes: React.FC<ColourCodesProps> = ({ rgb, hex }) => {
   const onCodeClick: MouseEventHandler = (e) => {
     const target = e.target as HTMLElement;
     e.stopPropagation();

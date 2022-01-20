@@ -9,8 +9,10 @@
 
 .generator__instructions {
   font-size: 1.6rem;
+  font-weight: 600;
 }
 
 .generator__codes {
   font-size: 3.2rem;
+  font-weight: 300;
 }

@@ -1,0 +1,21 @@
+.variation-box__container {
+  height: calc(100% / 9);
+  position: relative;
+}
+
+.variation-box {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.75s;
+}
+
+.tints .variation-box.active {
+  transform: translateX(100%);
+}
+
+.shades .variation-box.active {
+  transform: translateX(-100%);
+}
