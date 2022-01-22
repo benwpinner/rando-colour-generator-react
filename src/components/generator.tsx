@@ -9,14 +9,14 @@ interface GeneratorProps {
 
 const Generator: React.FC<GeneratorProps> = ({ colour }) => {
   const rgb = colourous.getRGBFromHueList(colour.rgb);
-  const textColour = colour.contrastColour;
+  const textColour = colourous.getRGBFromHueList(colour.contrastColour);
 
   return (
     <div
       className='generator'
       style={{
         backgroundColor: rgb,
-        color: colourous.getRGBFromHueList(colour.contrastColour),
+        color: textColour,
       }}
     >
       <span className='generator__instructions'>

@@ -21,6 +21,7 @@
   align-items: center;
   font-size: 2.4rem;
   font-weight: 500;
+  transition: all 0.9s;
 }
 
 svg {
@@ -40,4 +41,24 @@ svg {
   left: 0;
   top: 50%;
   transform: translate(-100%, -50%);
+}
+
+.variations__btn span {
+  transition: opacity 1s;
+}
+
+.tints .variations__btn.variations__btn--active {
+  right: -100%;
+}
+
+.shades .variations__btn.variations__btn--active {
+  left: -100%;
+}
+
+.variations__btn--active span {
+  opacity: 0;
+}
+
+.variations__btn-text--active {
+  display: none;
 }

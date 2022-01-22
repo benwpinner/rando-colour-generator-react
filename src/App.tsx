@@ -5,9 +5,11 @@ import Generator from './components/generator';
 import Variations from './components/variations';
 import { Colour } from './types/Colour';
 
-const generateNewColour = (): Colour => {
-  const [rgb, hex] = colourous.generateRandomColour();
-  const [tints, shades] = colourous.generateShadesTints(rgb);
+const generateNewColour = (colour?: string[]): Colour => {
+  const [rgb, hex] = colour
+    ? [colour, colourous.convertRGBToHex(colour)]
+    : colourous.generateRandomColour();
+  const [shades, tints] = colourous.generateShadesTints(rgb);
   const luminance = colourous.calculateLuminance(rgb);
   const contrastColour = colourous.getHigherContrastColour(rgb, [
     ...tints.map((tint) => tint[0]),
@@ -17,7 +19,9 @@ const generateNewColour = (): Colour => {
 };
 
 const App = () => {
-  const [colour, setColour] = useState<Colour>(generateNewColour());
+  const [colour, setColour] = useState<Colour>(
+    generateNewColour(['52', '58', '64'])
+  );
 
   const onClick: MouseEventHandler = (e) => {
     const target = e.target as Element;

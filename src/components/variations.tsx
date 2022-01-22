@@ -15,13 +15,36 @@ const Variations: React.FC<VariationsProps> = ({
   contrastColour,
 }) => {
   const [active, setActive] = useState(false);
+  const [btnActive, setBtnActive] = useState(false);
 
-  const onClick: MouseEventHandler = (e) => {
+  const controlButton = (btn: Element) => {
+    setTimeout(
+      () => {
+        btn.classList.toggle('variations__btn--active');
+        setBtnActive(!active);
+      },
+      active ? 300 : 150
+    );
+    const text = btn.querySelector('span');
+    if (!text) throw new Error('No text element detected');
+    if (active) text.classList.toggle('variations__btn-text--active');
+    else
+      setTimeout(
+        () => text.classList.toggle('variations__btn-text--active'),
+        1000
+      );
+  };
+
+  const onBtnClick: MouseEventHandler = (e) => {
     e.stopPropagation();
+    controlButton(e.currentTarget as Element);
     setActive(!active);
   };
 
-  const arrowIconId = type === `tints` ? `icon-arrow-right` : `icon-arrow-left`;
+  const arrowIconId =
+    type === `tints`
+      ? `icon-arrow-${btnActive ? `left` : `right`}`
+      : `icon-arrow-${btnActive ? `right` : `left`}`;
 
   return (
     <div className={`variations ${type}`}>
@@ -29,8 +52,10 @@ const Variations: React.FC<VariationsProps> = ({
         <VariationBox key={i} colour={colour} index={i} active={active} />
       ))}
       <div
-        onClick={onClick}
-        className='variations__btn'
+        onClick={onBtnClick}
+        className={`variations__btn ${
+          btnActive ? `variations__btn--active` : ``
+        }`}
         style={{
           color: colourous.getRGBFromHueList(contrastColour),
           fill: colourous.getRGBFromHueList(contrastColour),
@@ -41,11 +66,15 @@ const Variations: React.FC<VariationsProps> = ({
             <svg className='icon' viewBox='0 0 32 32'>
               <use href={`./icons.svg#${arrowIconId}`}></use>
             </svg>
-            <span>{type[0].toUpperCase() + type.slice(1)}</span>
+            <span className='variations__btn-text'>
+              {type[0].toUpperCase() + type.slice(1)}
+            </span>
           </>
         ) : (
           <>
-            <span>{type[0].toUpperCase() + type.slice(1)}</span>
+            <span className='variations__btn-text'>
+              {type[0].toUpperCase() + type.slice(1)}
+            </span>
             <svg className='icon' viewBox='0 0 32 32'>
               <use href={`./icons.svg#${arrowIconId}`}></use>
             </svg>
