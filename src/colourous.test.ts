@@ -2,11 +2,11 @@ import colourous from './colourous';
 
 test('generate random colour, generates colour properly', () => {
   const colour = colourous.generateRandomColour();
-  colour.rgb.forEach((val) => {
+  colour[0].forEach((val) => {
     expect(+val).toBeGreaterThanOrEqual(0);
     expect(+val).toBeLessThanOrEqual(255);
   });
-  colour.hex.forEach((val) => {
+  colour[1].forEach((val) => {
     expect(val).toMatch(/^[0-9A-F][0-9A-F]$/);
   });
 });

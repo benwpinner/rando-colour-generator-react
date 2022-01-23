@@ -1,3 +1,23 @@
 .generator {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.4rem 0 5.6rem;
+}
+
+.generator__instructions,
+.generator__codes {
+  transition: all 1s;
+}
+
+.generator__instructions {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.generator__codes {
+  font-size: 3.2rem;
+  font-weight: 300;
 }

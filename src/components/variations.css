@@ -1,0 +1,64 @@
+.variations {
+  position: absolute;
+  top: 0;
+  width: 25%;
+  height: 100vh;
+}
+
+.tints {
+  left: 0;
+  transform: translateX(-100%);
+}
+
+.shades {
+  right: 0;
+  transform: translateX(100%);
+}
+
+.variations__btn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 2.4rem;
+  font-weight: 500;
+  transition: all 0.9s;
+}
+
+svg {
+  height: 3.2rem;
+  width: 3.2rem;
+}
+
+.tints .variations__btn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(100%, -50%);
+}
+
+.shades .variations__btn {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translate(-100%, -50%);
+}
+
+.variations__btn span {
+  transition: opacity 1s;
+}
+
+.tints .variations__btn.variations__btn--active {
+  right: -100%;
+}
+
+.shades .variations__btn.variations__btn--active {
+  left: -100%;
+}
+
+.variations__btn--active span {
+  opacity: 0;
+}
+
+.variations__btn-text--active {
+  display: none;
+}
