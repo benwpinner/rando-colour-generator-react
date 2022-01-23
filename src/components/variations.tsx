@@ -2,10 +2,11 @@ import './variations.css';
 import VariationBox from './variation-box';
 import { MouseEventHandler, useState } from 'react';
 import colourous from '../colourous';
+import { Colour } from '../types';
 
 interface VariationsProps {
   type: 'tints' | 'shades';
-  variations: string[][][];
+  variations: Colour[];
   contrastColour: string[];
 }
 

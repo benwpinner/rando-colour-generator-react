@@ -50,9 +50,11 @@ class Colourous {
   _convertDecimalToHex(dec: number): string {
     let remainder;
     let remainderString = ``;
+    dec = this._round(dec);
     while (dec !== 0) {
       remainder = this._round(dec % 16);
       remainderString = `${this._decToHex[remainder]}${remainderString}`;
+      if (remainderString === 'undefined') console.log('undefined', dec);
       dec = Math.floor(dec / 16);
     }
 
@@ -130,10 +132,12 @@ class Colourous {
    * @author Ben Pinner
    */
   getHexFromHueList(colour: string[]): string {
-    if (colour.find((val) => !val.match(/^[0-9a-fA-F][0-9a-fA-F]$/)))
+    if (colour.find((val) => !val.match(/^[0-9a-fA-F][0-9a-fA-F]$/))) {
+      console.log(colour);
       throw new Error(
-        'One or more of the rgb values are outside the accepted range. Each number must be within 0-255'
+        'One or more of the hex values are outside the accepted range. Each character must be A-F or 0-9'
       );
+    }
     return `#${colour.join('')}`;
   }
 

@@ -10,6 +10,9 @@
   top: 0;
   left: 0;
   transition: transform 0.75s;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
 .tints .variation-box.active {
@@ -18,4 +21,10 @@
 
 .shades .variation-box.active {
   transform: translateX(-100%);
+}
+
+.variation-box__codes {
+  font-size: 2.05rem;
+  font-weight: 400;
+  transition: all 1s;
 }
