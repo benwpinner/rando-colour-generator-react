@@ -21,6 +21,9 @@ const Generator: React.FC<GeneratorProps> = ({ colour }) => {
     >
       <span className='generator__instructions'>
         Click the screen to generate a new colour
+        <br />
+        <br />
+        You are viewing: {colour.name}
       </span>
       <span className='generator__codes'>
         <ColourCodes rgb={colour.rgb} hex={colour.hex} />

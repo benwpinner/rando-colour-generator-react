@@ -3,6 +3,7 @@ export interface Colour {
   hex: string[];
   luminance: number;
   contrastColour: string[];
+  name: string;
 }
 
 export interface MainColour extends Colour {

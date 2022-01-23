@@ -1,9 +1,12 @@
 import './App.css';
 import { MouseEventHandler, useState } from 'react';
 import colourous from './colourous';
+import ntc from './nameThatColour';
 import Generator from './components/generator';
 import Variations from './components/variations';
 import { Colour, MainColour } from './types/Colour';
+
+ntc.init();
 
 const populateVariation = (variation: string[][]): Colour => {
   const luminance = colourous.calculateLuminance(variation[0]);
@@ -12,7 +15,14 @@ const populateVariation = (variation: string[][]): Colour => {
     ...tintsCodes.map((tint) => tint[0]),
     ...shadesCodes.map((shade) => shade[0]),
   ]);
-  return { rgb: variation[0], hex: variation[1], luminance, contrastColour };
+  const name = ntc.name(colourous.getHexFromHueList(variation[1]))[1] as string;
+  return {
+    rgb: variation[0],
+    hex: variation[1],
+    luminance,
+    contrastColour,
+    name,
+  };
 };
 
 const generateNewColour = (colour?: string[]): MainColour => {
@@ -28,7 +38,13 @@ const generateNewColour = (colour?: string[]): MainColour => {
   const tints = tintsCodes.map(populateVariation);
 
   const shades = shadesCodes.map(populateVariation);
-  return { rgb, hex, luminance, tints, shades, contrastColour };
+
+  // The function name returns an array containing strings and booleans.
+  // The element at index 1 will always be a string, so casting to a string
+  // on this line is purely to make TypeScript happy
+  const name = ntc.name(colourous.getHexFromHueList(hex))[1] as string;
+
+  return { rgb, hex, luminance, tints, shades, contrastColour, name };
 };
 
 const App = () => {
