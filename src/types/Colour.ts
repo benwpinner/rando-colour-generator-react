@@ -7,10 +7,7 @@ export interface Colour {
 }
 
 export interface MainColour extends Colour {
-  rgb: string[];
-  hex: string[];
-  luminance: number;
   tints: Colour[];
   shades: Colour[];
-  contrastColour: string[];
+  liked: boolean;
 }
