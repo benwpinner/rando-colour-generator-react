@@ -6,6 +6,7 @@
   right: 0;
   transform: translateY(-100%);
   transition: all 1s;
+  z-index: 0;
 }
 
 .likes__boxes {
@@ -42,8 +43,13 @@
   transition: all 1s;
 }
 
+.likes__btn * {
+  z-index: 0;
+}
+
 .likes--active {
   transform: translateY(0%);
+  z-index: 10;
 }
 
 .likes__btn span {

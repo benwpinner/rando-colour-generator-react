@@ -95,6 +95,9 @@ const App = () => {
   return (
     <div className='app' onClick={onClick}>
       <Generator colour={colour} />
+      {likes.length > 0 ? (
+        <Likes likes={likes} contrastColour={colour.contrastColour} />
+      ) : null}
       <Variations
         type='tints'
         variations={colour.tints}
@@ -105,9 +108,6 @@ const App = () => {
         variations={colour.shades}
         contrastColour={colour.contrastColour}
       />
-      {likes.length > 0 ? (
-        <Likes likes={likes} contrastColour={colour.contrastColour} />
-      ) : null}
     </div>
   );
 };
