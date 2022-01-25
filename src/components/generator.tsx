@@ -12,8 +12,6 @@ const Generator: React.FC<GeneratorProps> = ({ colour }) => {
   const rgb = colourous.getRGBFromHueList(colour.rgb);
   const textColour = colourous.getRGBFromHueList(colour.contrastColour);
 
-  console.log('Generator render');
-
   return (
     <div
       className='generator'

@@ -5,6 +5,7 @@ import ntc from './nameThatColour';
 import Generator from './components/generator';
 import Variations from './components/variations';
 import { Colour, MainColour } from './types/Colour';
+import Likes from './components/likes';
 
 ntc.init();
 
@@ -27,7 +28,7 @@ const populateVariation = (variation: string[][]): Colour => {
 
 const App = () => {
   const [likes, setLikes] = useState<Colour[]>([]);
-  if (!likes) {
+  if (likes.length === 0) {
     const likeColours: Colour[] = JSON.parse(
       localStorage.getItem('likes') || ''
     );
@@ -76,18 +77,20 @@ const App = () => {
     localStorage.setItem('likes', JSON.stringify(newLikes));
   };
 
-  const onClick: MouseEventHandler = (e) => {
-    const target = e.target as Element;
-    console.log(target);
-    if (
-      target.classList.contains('icon') ||
-      target.getAttribute('href')?.includes('icon-heart')
-    ) {
-      controlLikes();
-    } else setColour(generateNewColour());
+  const controlLikeClick = (like: string[]) => {
+    setColour(generateNewColour(like));
   };
 
-  console.log('App render');
+  const onClick: MouseEventHandler = (e) => {
+    const target = e.target as HTMLElement;
+    console.log(target);
+    if (target.closest('.action-bar__icon')) {
+      controlLikes();
+    } else if (target.closest('.like-box')) {
+      const backColour = colourous.getHueList(target.style.backgroundColor);
+      controlLikeClick(backColour);
+    } else setColour(generateNewColour());
+  };
 
   return (
     <div className='app' onClick={onClick}>
@@ -102,6 +105,9 @@ const App = () => {
         variations={colour.shades}
         contrastColour={colour.contrastColour}
       />
+      {likes.length > 0 ? (
+        <Likes likes={likes} contrastColour={colour.contrastColour} />
+      ) : null}
     </div>
   );
 };
