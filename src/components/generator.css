@@ -10,6 +10,7 @@
 .generator__instructions,
 .generator__codes {
   transition: all 1s;
+  text-align: center;
 }
 
 .generator__instructions {

@@ -20,11 +20,10 @@ const VariationBox: React.FC<VariationBoxProps> = ({
 
   setTimeout(() => setIsActive(active), 100 * (index - 1));
 
-  console.log(colour);
   return (
     <div className='variation-box__container'>
       <div
-        className={`variation-box ${isActive ? 'active' : ''}`}
+        className={`variation-box ${isActive ? 'variation-box--active' : ''}`}
         style={{
           backgroundColor: backgroundColour,
           color: colourous.getRGBFromHueList(colour.contrastColour),
@@ -33,6 +32,7 @@ const VariationBox: React.FC<VariationBoxProps> = ({
         <div className='variation-box__codes'>
           <ColourCodes rgb={colour.rgb} hex={colour.hex} />
         </div>
+        <div className='variation-box__name'>{colour.name}</div>
       </div>
     </div>
   );

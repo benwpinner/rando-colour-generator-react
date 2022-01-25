@@ -48,7 +48,7 @@ const Variations: React.FC<VariationsProps> = ({
       : `icon-arrow-${btnActive ? `right` : `left`}`;
 
   return (
-    <div className={`variations ${type}`}>
+    <div onClick={(e) => e.stopPropagation()} className={`variations ${type}`}>
       {variations.map((colour, i) => (
         <VariationBox key={i} colour={colour} index={i} active={active} />
       ))}

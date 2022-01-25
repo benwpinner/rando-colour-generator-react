@@ -45,6 +45,7 @@ svg {
 
 .variations__btn span {
   transition: opacity 1s;
+  z-index: 0;
 }
 
 .tints .variations__btn.variations__btn--active {

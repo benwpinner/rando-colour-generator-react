@@ -1,10 +1,11 @@
 import './generator.css';
 import colourous from '../colourous';
 import ColourCodes from './colour-codes';
-import { Colour } from '../types';
+import { MainColour } from '../types';
+import ActionBar from './action-bar';
 
 interface GeneratorProps {
-  colour: Colour;
+  colour: MainColour;
 }
 
 const Generator: React.FC<GeneratorProps> = ({ colour }) => {
@@ -17,11 +18,16 @@ const Generator: React.FC<GeneratorProps> = ({ colour }) => {
       style={{
         backgroundColor: rgb,
         color: textColour,
+        fill: textColour,
       }}
     >
       <span className='generator__instructions'>
         Click the screen to generate a new colour
+        <br />
+        <br />
+        You are viewing: {colour.name}
       </span>
+      <ActionBar liked={colour.liked} />
       <span className='generator__codes'>
         <ColourCodes rgb={colour.rgb} hex={colour.hex} />
       </span>
