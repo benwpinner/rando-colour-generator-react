@@ -24,11 +24,6 @@
   transition: all 0.9s;
 }
 
-svg {
-  height: 3.2rem;
-  width: 3.2rem;
-}
-
 .tints .variations__btn {
   position: absolute;
   right: 0;
