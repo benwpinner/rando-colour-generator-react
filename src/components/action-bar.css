@@ -3,8 +3,48 @@
   top: 0;
   left: 0;
   padding: 3.6rem 4.8rem;
+  display: flex;
+  justify-content: space-between;
+  width: 33vw;
+  transition: all 1s;
 }
 
 .action-bar__icon {
   cursor: pointer;
+}
+
+.action-bar__search {
+  align-items: center;
+  cursor: text;
+  display: flex;
+  height: 4rem;
+  opacity: 0.85;
+  width: 25rem;
+  border-radius: 4rem;
+  gap: 1.2rem;
+  padding: 0px 0.8rem;
+  transition: all 1s;
+}
+
+.action-bar__search input {
+  border: none;
+  background-color: inherit;
+  color: inherit;
+  height: 80%;
+  width: 19.4rem;
+}
+
+.action-bar__search input:focus {
+  outline: none;
+}
+
+.action-bar__search-icon {
+  height: 2.8rem;
+  width: 2.8rem;
+}
+
+.action-bar__search-icon use {
+  display: block;
+  height: 3.2rem;
+  width: 3.2rem;
 }

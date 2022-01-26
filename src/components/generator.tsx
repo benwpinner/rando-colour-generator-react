@@ -6,9 +6,10 @@ import ActionBar from './action-bar';
 
 interface GeneratorProps {
   colour: MainColour;
+  searchActive: boolean;
 }
 
-const Generator: React.FC<GeneratorProps> = ({ colour }) => {
+const Generator: React.FC<GeneratorProps> = ({ colour, searchActive }) => {
   const rgb = colourous.getRGBFromHueList(colour.rgb);
   const textColour = colourous.getRGBFromHueList(colour.contrastColour);
 
@@ -27,7 +28,8 @@ const Generator: React.FC<GeneratorProps> = ({ colour }) => {
         <br />
         You are viewing: {colour.name}
       </span>
-      <ActionBar liked={colour.liked} />
+      <ActionBar colour={colour} active={searchActive} />
+
       <span className='generator__codes'>
         <ColourCodes rgb={colour.rgb} hex={colour.hex} />
       </span>

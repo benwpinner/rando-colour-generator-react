@@ -28,6 +28,7 @@ const populateVariation = (variation: string[][]): Colour => {
 
 const App = () => {
   const [likes, setLikes] = useState<Colour[]>([]);
+  const [searchActive, setSearchActive] = useState(false);
   if (likes.length === 0) {
     const likeColours: Colour[] = JSON.parse(
       localStorage.getItem('likes') || ''
@@ -81,10 +82,29 @@ const App = () => {
     setColour(generateNewColour(like));
   };
 
+  const controlSearchClick = (target: HTMLElement) => {
+    const searchForm = target.closest('.action-bar__search-form');
+    if (!searchForm) throw new Error('Search form is not available.');
+    const searchInput = searchForm.querySelector(
+      '.action-bar__search-input'
+    ) as HTMLInputElement;
+    const use = target.closest('svg')?.querySelector('use') as SVGElement;
+
+    if (use?.getAttribute('href')?.includes('close')) {
+      searchInput.blur();
+      setSearchActive(false);
+    } else {
+      searchInput.focus();
+      setSearchActive(true);
+    }
+  };
+
   const onClick: MouseEventHandler = (e) => {
     const target = e.target as HTMLElement;
-    console.log(target);
-    if (target.closest('.action-bar__icon')) {
+    if (target.closest('.action-bar__search-form')) {
+      console.log(target);
+      controlSearchClick(target);
+    } else if (target.closest('.action-bar__icon')) {
       controlLikes();
     } else if (target.closest('.like-box')) {
       const backColour = colourous.getHueList(target.style.backgroundColor);
@@ -94,7 +114,7 @@ const App = () => {
 
   return (
     <div className='app' onClick={onClick}>
-      <Generator colour={colour} />
+      <Generator colour={colour} searchActive={searchActive} />
       {likes.length > 0 ? (
         <Likes likes={likes} contrastColour={colour.contrastColour} />
       ) : null}
