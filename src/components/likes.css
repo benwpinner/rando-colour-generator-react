@@ -40,7 +40,6 @@
   cursor: pointer;
   font-size: 2.4rem;
   font-weight: 500;
-  transition: all 1s;
 }
 
 .likes__btn * {
@@ -50,10 +49,6 @@
 .likes--active {
   transform: translateY(0%);
   z-index: 10;
-}
-
-.likes__btn span {
-  transition: opacity 1s;
 }
 
 .likes__btn--active span {
