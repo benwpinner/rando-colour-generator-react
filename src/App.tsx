@@ -1,5 +1,5 @@
 import './App.css';
-import { MouseEventHandler, useState } from 'react';
+import { FormEventHandler, MouseEventHandler, useState } from 'react';
 import colourous from './colourous';
 import ntc from './nameThatColour';
 import Generator from './components/generator';
@@ -102,7 +102,6 @@ const App = () => {
   const onClick: MouseEventHandler = (e) => {
     const target = e.target as HTMLElement;
     if (target.closest('.action-bar__search-form')) {
-      console.log(target);
       controlSearchClick(target);
     } else if (target.closest('.action-bar__icon')) {
       controlLikes();
@@ -112,8 +111,38 @@ const App = () => {
     } else setColour(generateNewColour());
   };
 
+  const onSubmit: FormEventHandler = (e) => {
+    e.preventDefault();
+    const rgbRegex =
+      /rgb\(\s*(-?\d+|-?\d*\.\d+(?=%))(%?)\s*,\s*(-?\d+|-?\d*\.\d+(?=%))(\2)\s*,\s*(-?\d+|-?\d*\.\d+(?=%))(\2)\s*\)/;
+    const hexRegex = /^#[0-9A-Fa-f]{6}\b/;
+    const target = e.target as HTMLElement;
+    const form = target.closest('.action-bar__search-form') as HTMLFormElement;
+    const input = form[0] as HTMLInputElement;
+
+    if (input) {
+      if (input.value.match(hexRegex)) {
+        const hexHueList = colourous.getHexHueList(input.value);
+        const rgb = colourous.convertHexToRGB(hexHueList);
+
+        setColour(generateNewColour(rgb));
+        setSearchActive(false);
+        input.value = '';
+        input.blur();
+      }
+      if (input.value.match(rgbRegex)) {
+        const rgb = colourous.getHueList(input.value);
+
+        setColour(generateNewColour(rgb));
+        setSearchActive(false);
+        input.value = '';
+        input.blur();
+      }
+    }
+  };
+
   return (
-    <div className='app' onClick={onClick}>
+    <div className='app' onClick={onClick} onSubmit={onSubmit}>
       <Generator colour={colour} searchActive={searchActive} />
       {likes.length > 0 ? (
         <Likes likes={likes} contrastColour={colour.contrastColour} />
