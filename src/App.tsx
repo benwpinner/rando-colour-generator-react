@@ -30,10 +30,12 @@ const App = () => {
   const [likes, setLikes] = useState<Colour[]>([]);
   const [searchActive, setSearchActive] = useState(false);
   if (likes.length === 0) {
-    const likeColours: Colour[] = JSON.parse(
-      localStorage.getItem('likes') || ''
-    );
-    setLikes(likeColours);
+    const localLikes = localStorage.getItem('likes');
+    let likeColours: Colour[];
+    if (localLikes) {
+      likeColours = JSON.parse(localLikes);
+      setLikes(likeColours);
+    } else likeColours = [];
   }
 
   const generateNewColour = (colour?: string[]): MainColour => {
