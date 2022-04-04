@@ -4,37 +4,37 @@ import colourous from './colourous';
 import ntc from './nameThatColour';
 import Generator from './components/generator';
 import Variations from './components/variations';
-import { Colour, MainColour } from './types/Colour';
+import { MainColour } from './types/Colour';
 import Likes from './components/likes';
+import { populateVariation } from './helpers/colourHelper';
+import { useTypedSelector } from './hooks/use-typed-selector';
+import { useActions } from './hooks/use-actions';
 
 ntc.init();
 
-const populateVariation = (variation: string[][]): Colour => {
-  const luminance = colourous.calculateLuminance(variation[0]);
-  const [shadesCodes, tintsCodes] = colourous.generateShadesTints(variation[0]);
-  const contrastColour = colourous.getHigherContrastColour(variation[0], [
-    ...tintsCodes.map((tint) => tint[0]),
-    ...shadesCodes.map((shade) => shade[0]),
-  ]);
-  const name = ntc.name(colourous.getHexFromHueList(variation[1]))[1] as string;
-  return {
-    rgb: variation[0],
-    hex: variation[1],
-    luminance,
-    contrastColour,
-    name,
-  };
-};
+// const populateVariation = (variation: string[][]): Colour => {
+//   const luminance = colourous.calculateLuminance(variation[0]);
+//   const [shadesCodes, tintsCodes] = colourous.generateShadesTints(variation[0]);
+//   const contrastColour = colourous.getHigherContrastColour(variation[0], [
+//     ...tintsCodes.map((tint) => tint[0]),
+//     ...shadesCodes.map((shade) => shade[0]),
+//   ]);
+//   const name = ntc.name(colourous.getHexFromHueList(variation[1]))[1] as string;
+//   return {
+//     rgb: variation[0],
+//     hex: variation[1],
+//     luminance,
+//     contrastColour,
+//     name,
+//   };
+// };
 
 const App = () => {
-  const [likes, setLikes] = useState<Colour[]>([]);
   const [searchActive, setSearchActive] = useState(false);
-  if (likes.length === 0) {
-    const likeColours: Colour[] = JSON.parse(
-      localStorage.getItem('likes') || ''
-    );
-    setLikes(likeColours);
-  }
+  const { toggleLikeColour, setColour } = useActions();
+
+  const likes = useTypedSelector((state) => state.likes.data);
+  const colour = useTypedSelector((state) => state.colours.data.colour);
 
   const generateNewColour = (colour?: string[]): MainColour => {
     const [rgb, hex] = colour
@@ -57,29 +57,17 @@ const App = () => {
 
     const liked = likes.find((like) => like.rgb === rgb) ? true : false;
 
-    return { rgb, hex, luminance, tints, shades, contrastColour, name, liked };
+    return { rgb, hex, luminance, tints, shades, contrastColour, name };
   };
 
-  const [colour, setColour] = useState<MainColour>(
-    generateNewColour(['52', '58', '64'])
-  );
-
   const controlLikes = () => {
-    const liked = !colour.liked;
-    const newLikes = colour.liked
-      ? likes.filter(
-          (like) =>
-            colourous.getHexFromHueList(like.hex) !==
-            colourous.getHexFromHueList(colour.hex)
-        )
-      : [...likes, colour as Colour];
-    setLikes(newLikes);
-    setColour({ ...colour, liked });
-    localStorage.setItem('likes', JSON.stringify(newLikes));
+    const liked = !likes.find((like) => colour.rgb === like.rgb);
+    toggleLikeColour(colour, liked);
+    localStorage.setItem('likes', JSON.stringify(likes));
   };
 
   const controlLikeClick = (like: string[]) => {
-    setColour(generateNewColour(like));
+    setColour(like);
   };
 
   const controlSearchClick = (target: HTMLElement) => {
@@ -108,7 +96,7 @@ const App = () => {
     } else if (target.closest('.like-box')) {
       const backColour = colourous.getHueList(target.style.backgroundColor);
       controlLikeClick(backColour);
-    } else setColour(generateNewColour());
+    } else setColour();
   };
 
   const onSubmit: FormEventHandler = (e) => {
@@ -125,7 +113,7 @@ const App = () => {
         const hexHueList = colourous.getHexHueList(input.value);
         const rgb = colourous.convertHexToRGB(hexHueList);
 
-        setColour(generateNewColour(rgb));
+        setColour(rgb);
         setSearchActive(false);
         input.value = '';
         input.blur();
@@ -133,7 +121,7 @@ const App = () => {
       if (input.value.match(rgbRegex)) {
         const rgb = colourous.getHueList(input.value);
 
-        setColour(generateNewColour(rgb));
+        setColour(rgb);
         setSearchActive(false);
         input.value = '';
         input.blur();
@@ -145,7 +133,7 @@ const App = () => {
     <div className='app' onClick={onClick} onSubmit={onSubmit}>
       <Generator colour={colour} searchActive={searchActive} />
       {likes.length > 0 ? (
-        <Likes likes={likes} contrastColour={colour.contrastColour} />
+        <Likes contrastColour={colour.contrastColour} />
       ) : null}
       <Variations
         type='tints'

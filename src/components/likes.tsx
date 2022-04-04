@@ -1,18 +1,19 @@
 import { MouseEventHandler, useState } from 'react';
 import colourous from '../colourous';
+import { useTypedSelector } from '../hooks/use-typed-selector';
 import { Colour } from '../types';
 import LikeBox from './like-box';
 import './likes.css';
 
 interface LikesProps {
-  likes: Colour[];
   contrastColour: string[];
 }
 
-const Likes: React.FC<LikesProps> = ({ likes, contrastColour }) => {
+const Likes: React.FC<LikesProps> = ({ contrastColour }) => {
   const [active, setActive] = useState(false);
   const [btnActive, setBtnActive] = useState(false);
   const btnColour = colourous.getRGBFromHueList(contrastColour);
+  const likes = useTypedSelector((state) => state.likes.data);
 
   const controlButton = (btn: Element) => {
     btn.classList.toggle('likes__btn--active');

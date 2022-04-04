@@ -9,5 +9,4 @@ export interface Colour {
 export interface MainColour extends Colour {
   tints: Colour[];
   shades: Colour[];
-  liked: boolean;
 }

@@ -1,9 +1,9 @@
-import colourous from "../colourous";
-import likes from "../components/likes";
-import ntc from "../nameThatColour";
-import { Colour, MainColour } from "../types";
+import colourous from '../colourous';
+import ntc from '../nameThatColour';
+import { ColoursStatePayload } from '../state/reducers';
+import { Colour, MainColour } from '../types';
 
-const generateNewColour = (colour?: string[]): MainColour => {
+export const generateNewColour = (colour: string[] | undefined): MainColour => {
   const [rgb, hex] = colour
     ? [colour, colourous.convertRGBToHex(colour)]
     : colourous.generateRandomColour();
@@ -22,11 +22,48 @@ const generateNewColour = (colour?: string[]): MainColour => {
   // on this line is purely to make TypeScript happy
   const name = ntc.name(colourous.getHexFromHueList(hex))[1] as string;
 
-  const liked = likes.find((like) => like.rgb === rgb) ? true : false;
-
-  return { rgb, hex, luminance, tints, shades, contrastColour, name, liked };
+  return { rgb, hex, luminance, tints, shades, contrastColour, name };
 };
 
-function populateVariation(populateVariation: any) {
-  throw new Error("Function not implemented.");
-}
+export const populateVariation = (code: string[][]): Colour => {
+  const luminance = colourous.calculateLuminance(code[0]);
+  const [shadesCodes, tintsCodes] = colourous.generateShadesTints(code[0]);
+  const contrastColour = colourous.getHigherContrastColour(code[0], [
+    ...tintsCodes.map((tint) => tint[0]),
+    ...shadesCodes.map((shade) => shade[0]),
+  ]);
+  const name = ntc.name(colourous.getHexFromHueList(code[1]))[1] as string;
+  return {
+    rgb: code[0],
+    hex: code[1],
+    luminance,
+    contrastColour,
+    name,
+  };
+};
+
+export const generateTints = (code: string[]): Colour[] => {
+  const tintList = colourous.generateTints(code);
+  const tints = tintList.map((tint) => populateVariation(tint));
+  return tints;
+};
+
+export const generateShades = (code: string[]): Colour[] => {
+  const shadeList = colourous.generateShades(code);
+  const shades = shadeList.map((shade) => populateVariation(shade));
+  return shades;
+};
+
+export const generateColourData = (code?: string[] | undefined): MainColour => {
+  const generatedColour = generateNewColour(code);
+  const colour = {
+    rgb: generatedColour.rgb,
+    hex: generatedColour.hex,
+    luminance: generatedColour.luminance,
+    contrastColour: generatedColour.contrastColour,
+    name: generatedColour.name,
+    tints: generatedColour.tints,
+    shades: generatedColour.shades,
+  };
+  return colour;
+};
