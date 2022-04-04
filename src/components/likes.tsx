@@ -1,7 +1,6 @@
 import { MouseEventHandler, useState } from 'react';
 import colourous from '../colourous';
 import { useTypedSelector } from '../hooks/use-typed-selector';
-import { Colour } from '../types';
 import LikeBox from './like-box';
 import './likes.css';
 

@@ -1,6 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import produce from 'immer';
-import { act } from 'react-dom/test-utils';
 import { generateColourData } from '../../helpers/colourHelper';
 import { getLikesFromLocalStorage } from '../../helpers/likesHelper';
 import { MainColour } from '../../types';

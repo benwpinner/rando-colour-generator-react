@@ -4,9 +4,7 @@ import colourous from './colourous';
 import ntc from './nameThatColour';
 import Generator from './components/generator';
 import Variations from './components/variations';
-import { MainColour } from './types/Colour';
 import Likes from './components/likes';
-import { populateVariation } from './helpers/colourHelper';
 import { useTypedSelector } from './hooks/use-typed-selector';
 import { useActions } from './hooks/use-actions';
 
@@ -36,29 +34,29 @@ const App = () => {
   const likes = useTypedSelector((state) => state.likes.data);
   const colour = useTypedSelector((state) => state.colours.data.colour);
 
-  const generateNewColour = (colour?: string[]): MainColour => {
-    const [rgb, hex] = colour
-      ? [colour, colourous.convertRGBToHex(colour)]
-      : colourous.generateRandomColour();
-    const luminance = colourous.calculateLuminance(rgb);
-    const [shadesCodes, tintsCodes] = colourous.generateShadesTints(rgb);
-    const contrastColour = colourous.getHigherContrastColour(rgb, [
-      ...tintsCodes.map((tint) => tint[0]),
-      ...shadesCodes.map((shade) => shade[0]),
-    ]);
-    const tints = tintsCodes.map(populateVariation);
+  // const generateNewColour = (colour?: string[]): MainColour => {
+  //   const [rgb, hex] = colour
+  //     ? [colour, colourous.convertRGBToHex(colour)]
+  //     : colourous.generateRandomColour();
+  //   const luminance = colourous.calculateLuminance(rgb);
+  //   const [shadesCodes, tintsCodes] = colourous.generateShadesTints(rgb);
+  //   const contrastColour = colourous.getHigherContrastColour(rgb, [
+  //     ...tintsCodes.map((tint) => tint[0]),
+  //     ...shadesCodes.map((shade) => shade[0]),
+  //   ]);
+  //   const tints = tintsCodes.map(populateVariation);
 
-    const shades = shadesCodes.map(populateVariation);
+  //   const shades = shadesCodes.map(populateVariation);
 
-    // The function name returns an array containing strings and booleans.
-    // The element at index 1 will always be a string, so casting to a string
-    // on this line is purely to make TypeScript happy
-    const name = ntc.name(colourous.getHexFromHueList(hex))[1] as string;
+  //   // The function name returns an array containing strings and booleans.
+  //   // The element at index 1 will always be a string, so casting to a string
+  //   // on this line is purely to make TypeScript happy
+  //   const name = ntc.name(colourous.getHexFromHueList(hex))[1] as string;
 
-    const liked = likes.find((like) => like.rgb === rgb) ? true : false;
+  //   const liked = likes.find((like) => like.rgb === rgb) ? true : false;
 
-    return { rgb, hex, luminance, tints, shades, contrastColour, name };
-  };
+  //   return { rgb, hex, luminance, tints, shades, contrastColour, name };
+  // };
 
   const controlLikes = () => {
     const liked = !likes.find((like) => colour.rgb === like.rgb);
@@ -94,7 +92,9 @@ const App = () => {
     } else if (target.closest('.action-bar__icon')) {
       controlLikes();
     } else if (target.closest('.like-box')) {
-      const backColour = colourous.getHueList(target.style.backgroundColor);
+      const backColour = colourous.getHueList(
+        (target.closest('.like-box') as HTMLElement).style.backgroundColor
+      );
       controlLikeClick(backColour);
     } else setColour();
   };

@@ -1,6 +1,5 @@
 import colourous from '../colourous';
 import ntc from '../nameThatColour';
-import { ColoursStatePayload } from '../state/reducers';
 import { Colour, MainColour } from '../types';
 
 export const generateNewColour = (colour: string[] | undefined): MainColour => {

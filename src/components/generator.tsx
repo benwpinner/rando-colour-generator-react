@@ -15,7 +15,7 @@ const Generator: React.FC<GeneratorProps> = ({ colour, searchActive }) => {
   const textColour = colourous.getRGBFromHueList(colour.contrastColour);
 
   const liked = useTypedSelector((state) =>
-    state.likes.data.find((like) => like.rgb === colour.rgb)
+    state.likes.data.find((like) => like.rgb === colour.rgb) ? true : false
   );
 
   return (
@@ -33,7 +33,7 @@ const Generator: React.FC<GeneratorProps> = ({ colour, searchActive }) => {
         <br />
         You are viewing: {colour.name}
       </span>
-      <ActionBar colour={colour} active={searchActive} liked />
+      <ActionBar colour={colour} active={searchActive} liked={liked} />
 
       <span className='generator__codes'>
         <ColourCodes rgb={colour.rgb} hex={colour.hex} />
