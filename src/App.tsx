@@ -10,23 +10,6 @@ import { useActions } from './hooks/use-actions';
 
 ntc.init();
 
-// const populateVariation = (variation: string[][]): Colour => {
-//   const luminance = colourous.calculateLuminance(variation[0]);
-//   const [shadesCodes, tintsCodes] = colourous.generateShadesTints(variation[0]);
-//   const contrastColour = colourous.getHigherContrastColour(variation[0], [
-//     ...tintsCodes.map((tint) => tint[0]),
-//     ...shadesCodes.map((shade) => shade[0]),
-//   ]);
-//   const name = ntc.name(colourous.getHexFromHueList(variation[1]))[1] as string;
-//   return {
-//     rgb: variation[0],
-//     hex: variation[1],
-//     luminance,
-//     contrastColour,
-//     name,
-//   };
-// };
-
 const App = () => {
   const { toggleLikeColour, setColour, toggleSearchActive } = useActions();
 
@@ -35,30 +18,6 @@ const App = () => {
   const searchActive = useTypedSelector(
     (state) => state.colours.data.searchActive
   );
-
-  // const generateNewColour = (colour?: string[]): MainColour => {
-  //   const [rgb, hex] = colour
-  //     ? [colour, colourous.convertRGBToHex(colour)]
-  //     : colourous.generateRandomColour();
-  //   const luminance = colourous.calculateLuminance(rgb);
-  //   const [shadesCodes, tintsCodes] = colourous.generateShadesTints(rgb);
-  //   const contrastColour = colourous.getHigherContrastColour(rgb, [
-  //     ...tintsCodes.map((tint) => tint[0]),
-  //     ...shadesCodes.map((shade) => shade[0]),
-  //   ]);
-  //   const tints = tintsCodes.map(populateVariation);
-
-  //   const shades = shadesCodes.map(populateVariation);
-
-  //   // The function name returns an array containing strings and booleans.
-  //   // The element at index 1 will always be a string, so casting to a string
-  //   // on this line is purely to make TypeScript happy
-  //   const name = ntc.name(colourous.getHexFromHueList(hex))[1] as string;
-
-  //   const liked = likes.find((like) => like.rgb === rgb) ? true : false;
-
-  //   return { rgb, hex, luminance, tints, shades, contrastColour, name };
-  // };
 
   const controlLikes = () => {
     const liked = !likes.find((like) => colour.rgb === like.rgb);
