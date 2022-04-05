@@ -6,6 +6,8 @@ import {
   Action,
   SetColourAction,
   ToggleLikeColourAction,
+  ToggleLikesOpenAction,
+  ToggleSearchActiveAction,
   ToggleVariationAction,
   VariationType,
 } from '../actions';
@@ -18,15 +20,11 @@ export const setColour = (colour?: string[]): SetColourAction => {
 };
 
 export const toggleVariations = (
-  open: boolean,
   type: VariationType
 ): ToggleVariationAction => {
   return {
     type: ActionType.TOGGLE_VARIATIONS,
-    payload: {
-      type,
-      open,
-    },
+    payload: type,
   };
 };
 
@@ -54,5 +52,17 @@ export const saveLikes = () => {
     } catch (err: any) {
       dispatch({ type: ActionType.SAVE_LIKES_ERROR, payload: err.message });
     }
+  };
+};
+
+export const toggleLikesOpen = (): ToggleLikesOpenAction => {
+  return {
+    type: ActionType.TOGGLE_LIKES_OPEN,
+  };
+};
+
+export const toggleSearchActive = (): ToggleSearchActiveAction => {
+  return {
+    type: ActionType.TOGGLE_SEARCH_ACTIVE,
   };
 };

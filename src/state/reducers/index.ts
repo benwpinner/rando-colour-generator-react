@@ -10,6 +10,8 @@ export interface ColoursStatePayload {
   colour: MainColour;
   tintsOpen: boolean;
   shadesOpen: boolean;
+  likesOpen: boolean;
+  searchActive: boolean;
 }
 
 export interface ColoursState {
@@ -31,6 +33,8 @@ const initialColoursState: ColoursState = {
     colour: generateColourData(['52', '58', '64']),
     tintsOpen: false,
     shadesOpen: false,
+    likesOpen: false,
+    searchActive: false,
   },
 };
 
@@ -49,9 +53,15 @@ const coloursReducer = produce(
         state.data.colour = generateColourData(action.payload);
         return state;
       case ActionType.TOGGLE_VARIATIONS:
-        action.payload.type === 'shade'
-          ? (state.data.shadesOpen = action.payload.open)
-          : (state.data.tintsOpen = action.payload.open);
+        action.payload === 'shades'
+          ? (state.data.shadesOpen = !state.data.shadesOpen)
+          : (state.data.tintsOpen = !state.data.tintsOpen);
+        return state;
+      case ActionType.TOGGLE_SEARCH_ACTIVE:
+        state.data.searchActive = !state.data.searchActive;
+        return state;
+      case ActionType.TOGGLE_LIKES_OPEN:
+        state.data.likesOpen = !state.data.likesOpen;
         return state;
       default:
         return state;

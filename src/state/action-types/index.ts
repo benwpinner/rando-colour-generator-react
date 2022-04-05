@@ -4,4 +4,5 @@ export enum ActionType {
   TOGGLE_VARIATIONS = 'toggle_variations',
   SAVE_LIKES_ERROR = 'save_likes_error',
   TOGGLE_LIKES_OPEN = 'toggle_likes_open',
+  TOGGLE_SEARCH_ACTIVE = 'toggle_search_active',
 }

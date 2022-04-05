@@ -28,11 +28,13 @@ ntc.init();
 // };
 
 const App = () => {
-  const [searchActive, setSearchActive] = useState(false);
-  const { toggleLikeColour, setColour } = useActions();
+  const { toggleLikeColour, setColour, toggleSearchActive } = useActions();
 
   const likes = useTypedSelector((state) => state.likes.data);
   const colour = useTypedSelector((state) => state.colours.data.colour);
+  const searchActive = useTypedSelector(
+    (state) => state.colours.data.searchActive
+  );
 
   // const generateNewColour = (colour?: string[]): MainColour => {
   //   const [rgb, hex] = colour
@@ -78,10 +80,10 @@ const App = () => {
 
     if (use?.getAttribute('href')?.includes('close')) {
       searchInput.blur();
-      setSearchActive(false);
+      toggleSearchActive();
     } else {
       searchInput.focus();
-      setSearchActive(true);
+      toggleSearchActive();
     }
   };
 
@@ -114,7 +116,7 @@ const App = () => {
         const rgb = colourous.convertHexToRGB(hexHueList);
 
         setColour(rgb);
-        setSearchActive(false);
+        toggleSearchActive();
         input.value = '';
         input.blur();
       }
@@ -122,7 +124,7 @@ const App = () => {
         const rgb = colourous.getHueList(input.value);
 
         setColour(rgb);
-        setSearchActive(false);
+        toggleSearchActive();
         input.value = '';
         input.blur();
       }

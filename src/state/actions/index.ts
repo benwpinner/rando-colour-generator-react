@@ -1,7 +1,7 @@
 import { MainColour } from '../../types';
 import { ActionType } from '../action-types';
 
-export type VariationType = 'tint' | 'shade';
+export type VariationType = 'tints' | 'shades';
 
 export interface SetColourAction {
   type: ActionType.SET_COLOUR;
@@ -10,10 +10,7 @@ export interface SetColourAction {
 
 export interface ToggleVariationAction {
   type: ActionType.TOGGLE_VARIATIONS;
-  payload: {
-    type: VariationType;
-    open: boolean;
-  };
+  payload: VariationType;
 }
 
 export interface ToggleLikeColourAction {
@@ -31,11 +28,16 @@ export interface SaveLikesErrorAction {
 
 export interface ToggleLikesOpenAction {
   type: ActionType.TOGGLE_LIKES_OPEN;
-  payload: boolean;
+}
+
+export interface ToggleSearchActiveAction {
+  type: ActionType.TOGGLE_SEARCH_ACTIVE;
 }
 
 export type Action =
   | SetColourAction
   | ToggleVariationAction
   | ToggleLikeColourAction
-  | SaveLikesErrorAction;
+  | SaveLikesErrorAction
+  | ToggleLikesOpenAction
+  | ToggleSearchActiveAction;

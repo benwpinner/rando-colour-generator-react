@@ -3,6 +3,8 @@ import VariationBox from './variation-box';
 import { MouseEventHandler, useState } from 'react';
 import colourous from '../colourous';
 import { Colour } from '../types';
+import { useActions } from '../hooks/use-actions';
+import { useTypedSelector } from '../hooks/use-typed-selector';
 
 interface VariationsProps {
   type: 'tints' | 'shades';
@@ -15,14 +17,13 @@ const Variations: React.FC<VariationsProps> = ({
   variations,
   contrastColour,
 }) => {
-  const [active, setActive] = useState(false);
-  const [btnActive, setBtnActive] = useState(false);
+  const { toggleVariations } = useActions();
+  const active = useTypedSelector((state) => state.colours.data[`${type}Open`]);
 
   const controlButton = (btn: Element) => {
     setTimeout(
       () => {
         btn.classList.toggle('variations__btn--active');
-        setBtnActive(!active);
       },
       active ? 300 : 150
     );
@@ -38,14 +39,14 @@ const Variations: React.FC<VariationsProps> = ({
 
   const onBtnClick: MouseEventHandler = (e) => {
     e.stopPropagation();
+    toggleVariations(type);
     controlButton(e.currentTarget as Element);
-    setActive(!active);
   };
 
   const arrowIconId =
     type === `tints`
-      ? `icon-arrow-${btnActive ? `left` : `right`}`
-      : `icon-arrow-${btnActive ? `right` : `left`}`;
+      ? `icon-arrow-${active ? `left` : `right`}`
+      : `icon-arrow-${active ? `right` : `left`}`;
 
   return (
     <div onClick={(e) => e.stopPropagation()} className={`variations ${type}`}>
@@ -54,9 +55,7 @@ const Variations: React.FC<VariationsProps> = ({
       ))}
       <div
         onClick={onBtnClick}
-        className={`variations__btn ${
-          btnActive ? `variations__btn--active` : ``
-        }`}
+        className={`variations__btn`}
         style={{
           color: colourous.getRGBFromHueList(contrastColour),
           fill: colourous.getRGBFromHueList(contrastColour),
