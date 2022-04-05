@@ -3,4 +3,5 @@ export enum ActionType {
   TOGGLE_LIKE_COLOUR = 'toggle_like_colour',
   TOGGLE_VARIATIONS = 'toggle_variations',
   SAVE_LIKES_ERROR = 'save_likes_error',
+  TOGGLE_LIKES_OPEN = 'toggle_likes_open',
 }

@@ -39,6 +39,7 @@ const Likes: React.FC<LikesProps> = ({ contrastColour }) => {
         color: btnColour,
         fill: btnColour,
         stroke: btnColour,
+        height: likes.length >= 8 ? `calc((100vh /9) * 8)` : `auto`,
       }}
     >
       <div

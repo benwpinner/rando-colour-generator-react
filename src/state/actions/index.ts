@@ -29,6 +29,11 @@ export interface SaveLikesErrorAction {
   payload: string;
 }
 
+export interface ToggleLikesOpenAction {
+  type: ActionType.TOGGLE_LIKES_OPEN;
+  payload: boolean;
+}
+
 export type Action =
   | SetColourAction
   | ToggleVariationAction
