@@ -1,5 +1,5 @@
 import './App.css';
-import { FormEventHandler, MouseEventHandler, useState } from 'react';
+import { FormEventHandler, MouseEventHandler } from 'react';
 import colourous from './colourous';
 import ntc from './nameThatColour';
 import Generator from './components/generator';

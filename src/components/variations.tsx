@@ -1,6 +1,6 @@
 import './variations.css';
 import VariationBox from './variation-box';
-import { MouseEventHandler, useState } from 'react';
+import { MouseEventHandler } from 'react';
 import colourous from '../colourous';
 import { Colour } from '../types';
 import { useActions } from '../hooks/use-actions';
