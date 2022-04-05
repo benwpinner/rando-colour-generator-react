@@ -15,7 +15,6 @@ const Generator: React.FC<GeneratorProps> = ({ colour, searchActive }) => {
   const textColour = colourous.getRGBFromHueList(colour.contrastColour);
 
   const liked = useTypedSelector((state) => {
-    console.log(state.likes.data, colour.rgb);
     return state.likes.data.find(
       (like) => like.rgb.filter((val, i) => colour.rgb[i] === val).length === 3
     )
