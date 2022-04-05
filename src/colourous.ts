@@ -260,8 +260,8 @@ class Colourous {
 
   /**
    * Takes a colour and generates a list of tints and a list of shades
-   * @param {string[]} colour The colour to generate shades and tints for, either in form `rgb(red,greeb,blue)` or [red,green,blue]
-   * @returns {string[][][][]} The list of shades and list of tints, each colour also has it's luminance returned
+   * @param {string[]} colour The colour to generate shades and tints for, in form [red,green,blue]
+   * @returns {string[][][][]} The list of shades
    * @author Ben Pinner
    */
   generateShadesTints(colour: string[]): string[][][][] {
@@ -275,6 +275,38 @@ class Colourous {
     }
 
     return [shades, tints];
+  }
+
+  /**
+   * Takes a colour and generates a list of tints and a list of shades
+   * @param {string[]} colour The colour to generate shades and tints for, either in form `rgb(red,green,blue)` or [red,green,blue]
+   * @returns {string[][][][]} The list of shades and list of tints
+   * @author Ben Pinner
+   */
+  generateShades(colour: string[]): string[][][] {
+    const shades: string[][][] = [];
+    for (let i = 0; i < 9; i++) {
+      const shade = this._generateShade(colour, (i + 1) / 10);
+      shades.push(shade);
+    }
+
+    return shades;
+  }
+
+  /**
+   * Takes a colour and generates a list of tints
+   * @param {string[]} colour The colour to generate tints for, in form [red,green,blue]
+   * @returns {string[][][]} The list of tints, each colour also has it's luminance returned
+   * @author Ben Pinner
+   */
+  generateTints(colour: string[]): string[][][] {
+    const tints: string[][][] = [];
+    for (let i = 0; i < 9; i++) {
+      const tint = this._generateShade(colour, (i + 1) / 10);
+      tints.push(tint);
+    }
+
+    return tints;
   }
 
   /**

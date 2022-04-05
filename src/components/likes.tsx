@@ -1,25 +1,25 @@
-import { MouseEventHandler, useState } from 'react';
+import { MouseEventHandler } from 'react';
 import colourous from '../colourous';
-import { Colour } from '../types';
+import { useActions } from '../hooks/use-actions';
+import { useTypedSelector } from '../hooks/use-typed-selector';
 import LikeBox from './like-box';
 import './likes.css';
 
 interface LikesProps {
-  likes: Colour[];
   contrastColour: string[];
 }
 
-const Likes: React.FC<LikesProps> = ({ likes, contrastColour }) => {
-  const [active, setActive] = useState(false);
-  const [btnActive, setBtnActive] = useState(false);
+const Likes: React.FC<LikesProps> = ({ contrastColour }) => {
   const btnColour = colourous.getRGBFromHueList(contrastColour);
+  const likes = useTypedSelector((state) => state.likes.data);
+  const likesOpen = useTypedSelector((state) => state.colours.data.likesOpen);
+  const { toggleLikesOpen } = useActions();
 
   const controlButton = (btn: Element) => {
     btn.classList.toggle('likes__btn--active');
-    setBtnActive(!active);
     const text = btn.querySelector('span');
     if (!text) throw new Error('No text element detected');
-    if (active) text.classList.toggle('likes__btn-text--active');
+    if (likesOpen) text.classList.toggle('likes__btn-text--active');
     else
       setTimeout(() => text.classList.toggle('likes__btn-text--active'), 1000);
   };
@@ -27,18 +27,19 @@ const Likes: React.FC<LikesProps> = ({ likes, contrastColour }) => {
   const onBtnClick: MouseEventHandler = (e) => {
     e.stopPropagation();
     controlButton(e.currentTarget as Element);
-    setActive(!active);
+    toggleLikesOpen();
   };
 
-  const arrowDir = btnActive ? 'up' : 'down';
+  const arrowDir = likesOpen ? 'up' : 'down';
 
   return (
     <div
-      className={`likes ${active ? `likes--active` : ''}`}
+      className={`likes ${likesOpen ? `likes--active` : ''}`}
       style={{
         color: btnColour,
         fill: btnColour,
         stroke: btnColour,
+        height: likes.length >= 8 ? `calc((100vh /9) * 8)` : `auto`,
       }}
     >
       <div
@@ -54,7 +55,7 @@ const Likes: React.FC<LikesProps> = ({ likes, contrastColour }) => {
 
       <div
         onClick={onBtnClick}
-        className={`likes__btn ${btnActive ? `likes__btn--active` : ''}`}
+        className={`likes__btn ${likesOpen ? `likes__btn--active` : ''}`}
       >
         <svg className='likes__btn-icon' viewBox='0 0 32 32'>
           <use href={`./icons.svg#icon-caret-${arrowDir}`}></use>

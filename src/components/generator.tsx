@@ -3,6 +3,7 @@ import colourous from '../colourous';
 import ColourCodes from './colour-codes';
 import { MainColour } from '../types';
 import ActionBar from './action-bar';
+import { useTypedSelector } from '../hooks/use-typed-selector';
 
 interface GeneratorProps {
   colour: MainColour;
@@ -12,6 +13,14 @@ interface GeneratorProps {
 const Generator: React.FC<GeneratorProps> = ({ colour, searchActive }) => {
   const rgb = colourous.getRGBFromHueList(colour.rgb);
   const textColour = colourous.getRGBFromHueList(colour.contrastColour);
+
+  const liked = useTypedSelector((state) => {
+    return state.likes.data.find(
+      (like) => like.rgb.filter((val, i) => colour.rgb[i] === val).length === 3
+    )
+      ? true
+      : false;
+  });
 
   return (
     <div
@@ -28,7 +37,7 @@ const Generator: React.FC<GeneratorProps> = ({ colour, searchActive }) => {
         <br />
         You are viewing: {colour.name}
       </span>
-      <ActionBar colour={colour} active={searchActive} />
+      <ActionBar colour={colour} active={searchActive} liked={liked} />
 
       <span className='generator__codes'>
         <ColourCodes rgb={colour.rgb} hex={colour.hex} />

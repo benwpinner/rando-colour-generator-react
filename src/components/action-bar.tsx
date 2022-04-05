@@ -5,10 +5,10 @@ import './action-bar.css';
 interface ActionBarProps {
   colour: MainColour;
   active: boolean;
+  liked: boolean;
 }
 
-const ActionBar: React.FC<ActionBarProps> = ({ colour, active }) => {
-  const liked = colour.liked;
+const ActionBar: React.FC<ActionBarProps> = ({ colour, active, liked }) => {
   const searchColour = colourous.getRGBFromHueList(colour.contrastColour);
   const searchTextColour = colourous.getRGBFromHueList(colour.rgb);
   return (

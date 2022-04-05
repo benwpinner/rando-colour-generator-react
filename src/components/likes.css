@@ -51,6 +51,10 @@
   z-index: 10;
 }
 
+.likes__btn span {
+  transition: opacity 1s;
+}
+
 .likes__btn--active span {
   opacity: 0;
 }
