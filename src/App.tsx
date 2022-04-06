@@ -19,6 +19,9 @@ const App = () => {
     (state) => state.colours.data.searchActive
   );
 
+  /**
+   * Method to handle liking of colour
+   */
   const controlLikes = () => {
     const liked = !likes.find((like) => colour.rgb === like.rgb);
     toggleLikeColour(colour, liked);

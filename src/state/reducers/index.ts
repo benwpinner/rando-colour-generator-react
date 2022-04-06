@@ -12,6 +12,7 @@ export interface ColoursStatePayload {
   shadesOpen: boolean;
   likesOpen: boolean;
   searchActive: boolean;
+  searchValue: string;
 }
 
 export interface ColoursState {
@@ -35,6 +36,7 @@ const initialColoursState: ColoursState = {
     shadesOpen: false,
     likesOpen: false,
     searchActive: false,
+    searchValue: '',
   },
 };
 
@@ -62,6 +64,9 @@ const coloursReducer = produce(
         return state;
       case ActionType.TOGGLE_LIKES_OPEN:
         state.data.likesOpen = !state.data.likesOpen;
+        return state;
+      case ActionType.SEND_SEARCH_KEYS:
+        state.data.searchValue = action.payload;
         return state;
       default:
         return state;
