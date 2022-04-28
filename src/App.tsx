@@ -35,14 +35,21 @@ const App = () => {
     const searchInput = searchForm.querySelector(
       '.action-bar__search-input'
     ) as HTMLInputElement;
-    const use = target.closest('svg')?.querySelector('use') as SVGElement;
-
-    if (use?.getAttribute('href')?.includes('close')) {
-      searchInput.blur();
+    let use = target.closest('svg')?.querySelector('use') as SVGElement;
+    if (use) {
+      if (use.getAttribute('href')?.includes('search')) {
+        searchInput.focus();
+      }
       toggleSearchActive();
     } else {
-      searchInput.focus();
-      toggleSearchActive();
+      use = searchForm.querySelector(
+        '.action-bar__search-icon use'
+      ) as SVGElement;
+      console.log(use);
+      if (use.getAttribute('href')?.includes('search')) {
+        searchInput.focus();
+        toggleSearchActive();
+      }
     }
   };
 

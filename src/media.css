@@ -1,5 +1,18 @@
 @media (max-width: 78em) {
+  /* Generator view styling */
   html {
     font-size: 60%;
   }
+
+  .action-bar {
+    padding: 3.2rem 2.4rem;
+  }
+
+  .variation-box__codes {
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+}
+
+@media (max-width: 62.5em) {
 }

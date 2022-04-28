@@ -20,7 +20,11 @@ const ActionBar: React.FC<ActionBarProps> = ({ colour, active, liked }) => {
           ></use>
         </svg>
       </div>
-      <form className='action-bar__search-form'>
+      <form
+        className={`action-bar__search-form ${
+          active ? `action-bar__search-form--active` : ``
+        }`}
+      >
         <div
           className='action-bar__search'
           style={{
