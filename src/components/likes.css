@@ -2,7 +2,7 @@
   position: absolute;
   height: 90%;
   width: 25%;
-  top: 0;
+  top: -1px;
   right: 0;
   transform: translateY(-100%);
   transition: all 1s;
