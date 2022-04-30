@@ -15,4 +15,24 @@
 }
 
 @media (max-width: 62.5em) {
+  .action-bar__search-input {
+    transition: width 1s;
+    width: 0;
+  }
+
+  .action-bar__search-input--active {
+    width: 15rem;
+  }
+
+  .action-bar__search {
+    transition: width gap 1s;
+    width: 3.8rem;
+    gap: 0;
+  }
+
+  .action-bar__search--active {
+    transition: width gap 1s;
+    gap: 1.2rem;
+    width: 20rem;
+  }
 }

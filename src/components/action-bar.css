@@ -4,7 +4,7 @@
   left: 0;
   padding: 3.6rem 4.8rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   width: 33vw;
   transition: all 1s;
@@ -20,22 +20,27 @@
   display: flex;
   height: 4rem;
   opacity: 0.85;
-  width: 25rem;
+  width: auto;
   border-radius: 4rem;
   gap: 1.2rem;
   padding: 0px 0.8rem;
   transition: all 1s;
 }
 
-.action-bar__search input {
+.action-bar__search-input {
   border: none;
   background-color: inherit;
   color: inherit;
   height: 80%;
-  width: 19.4rem;
+  width: 100%;
 }
 
-.action-bar__search input:focus {
+::placeholder {
+  color: inherit;
+  opacity: 0.6;
+}
+
+.action-bar__search-input:focus {
   outline: none;
 }
 

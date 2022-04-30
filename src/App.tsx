@@ -32,22 +32,14 @@ const App = () => {
   const controlSearchClick = (target: HTMLElement) => {
     const searchForm = target.closest('.action-bar__search-form');
     if (!searchForm) throw new Error('Search form is not available.');
-    const searchInput = searchForm.querySelector(
-      '.action-bar__search-input'
-    ) as HTMLInputElement;
     let use = target.closest('svg')?.querySelector('use') as SVGElement;
     if (use) {
-      if (use.getAttribute('href')?.includes('search')) {
-        searchInput.focus();
-      }
       toggleSearchActive();
     } else {
       use = searchForm.querySelector(
         '.action-bar__search-icon use'
       ) as SVGElement;
-      console.log(use);
       if (use.getAttribute('href')?.includes('search')) {
-        searchInput.focus();
         toggleSearchActive();
       }
     }
