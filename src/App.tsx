@@ -19,16 +19,6 @@ const App = () => {
     (state) => state.colours.data.searchActive
   );
 
-  const controlLikes = () => {
-    const liked = !likes.find((like) => colour.rgb === like.rgb);
-    toggleLikeColour(colour, liked);
-    localStorage.setItem('likes', JSON.stringify(likes));
-  };
-
-  const controlLikeClick = (like: string[]) => {
-    setColour(like);
-  };
-
   const controlSearchClick = (target: HTMLElement) => {
     const searchForm = target.closest('.action-bar__search-form');
     if (!searchForm) throw new Error('Search form is not available.');
@@ -50,12 +40,12 @@ const App = () => {
     if (target.closest('.action-bar__search-form')) {
       controlSearchClick(target);
     } else if (target.closest('.action-bar__icon')) {
-      controlLikes();
+      toggleLikeColour(colour);
     } else if (target.closest('.like-box')) {
       const backColour = colourous.getHueList(
         (target.closest('.like-box') as HTMLElement).style.backgroundColor
       );
-      controlLikeClick(backColour);
+      setColour(backColour);
     } else setColour();
   };
 

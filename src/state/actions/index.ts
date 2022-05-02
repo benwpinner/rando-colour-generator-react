@@ -17,7 +17,6 @@ export interface ToggleLikeColourAction {
   type: ActionType.TOGGLE_LIKE_COLOUR;
   payload: {
     colour: MainColour;
-    liked: boolean;
   };
 }
 

@@ -29,14 +29,12 @@ export const toggleVariations = (
 };
 
 export const toggleLikeColour = (
-  colour: MainColour,
-  liked: boolean = true
+  colour: MainColour
 ): ToggleLikeColourAction => {
   return {
     type: ActionType.TOGGLE_LIKE_COLOUR,
     payload: {
       colour,
-      liked,
     },
   };
 };
