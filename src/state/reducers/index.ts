@@ -77,13 +77,20 @@ const likesReducer = produce(
         state.error = action.payload;
         return state;
       case ActionType.TOGGLE_LIKE_COLOUR:
+        const colour = action.payload.colour;
+        const [isLiked, index] = state.data.reduce(
+          (acc, item, i) => {
+            if (acc[0]) return acc;
+            return [
+              item.rgb.filter((val, i) => colour.rgb[i] === val).length === 3,
+              i,
+            ];
+          },
+          [false, 0]
+        );
         state.error = null;
         state.loading = false;
-        action.payload.liked
-          ? state.data.push(action.payload.colour)
-          : state.data.filter(
-              (colour) => colour.rgb !== action.payload.colour.rgb
-            );
+        isLiked ? state.data.splice(index, 1) : state.data.push(colour);
         return state;
       default:
         return state;

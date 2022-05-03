@@ -23,7 +23,6 @@ const ColourCodes: React.FC<ColourCodesProps> = ({ rgb, hex }) => {
       >
         {colourous.getRGBFromHueList(rgb)}
       </span>
-      &nbsp;&nbsp;&nbsp;
       <span
         onClick={onCodeClick}
         className='colour-codes__code colour-codes__code--hex'

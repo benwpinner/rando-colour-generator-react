@@ -14,13 +14,11 @@ const Generator: React.FC<GeneratorProps> = ({ colour, searchActive }) => {
   const rgb = colourous.getRGBFromHueList(colour.rgb);
   const textColour = colourous.getRGBFromHueList(colour.contrastColour);
 
-  const liked = useTypedSelector((state) => {
-    return state.likes.data.find(
+  const liked = useTypedSelector((state) =>
+    state.likes.data.some(
       (like) => like.rgb.filter((val, i) => colour.rgb[i] === val).length === 3
     )
-      ? true
-      : false;
-  });
+  );
 
   return (
     <div

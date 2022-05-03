@@ -1,5 +1,3 @@
-import './index.css';
-import './media.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
@@ -7,6 +5,8 @@ import reportWebVitals from './reportWebVitals';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Provider } from 'react-redux';
 import { store } from './state';
+import './index.css';
+import './media.css';
 
 ReactDOM.render(
   <React.StrictMode>
