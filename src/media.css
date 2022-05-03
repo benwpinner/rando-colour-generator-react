@@ -1,5 +1,4 @@
 @media (max-width: 78em) {
-  /* Generator view styling */
   html {
     font-size: 60%;
   }
@@ -9,12 +8,16 @@
   }
 
   .variation-box__codes {
-    font-size: 1.8rem;
+    font-size: 1.7rem;
     font-weight: 500;
   }
 }
 
 @media (max-width: 62.5em) {
+  .action-bar {
+    width: 25vw;
+  }
+
   .action-bar__search-input {
     transition: width 1s;
     width: 0;
@@ -34,5 +37,15 @@
     transition: width gap 1s;
     gap: 1.2rem;
     width: 20rem;
+  }
+
+  .variations {
+    width: 33%;
+  }
+}
+
+@media (max-width: 48.9em) {
+  .variations {
+    width: 50%;
   }
 }
