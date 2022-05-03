@@ -4,6 +4,7 @@ import { MainColour } from '../../types';
 import { ActionType } from '../action-types';
 import {
   Action,
+  SendSearchKeysAction,
   SetColourAction,
   ToggleLikeColourAction,
   ToggleLikesOpenAction,
@@ -64,5 +65,12 @@ export const toggleLikesOpen = (): ToggleLikesOpenAction => {
 export const toggleSearchActive = (): ToggleSearchActiveAction => {
   return {
     type: ActionType.TOGGLE_SEARCH_ACTIVE,
+  };
+};
+
+export const sendSearchKeys = (value: string): SendSearchKeysAction => {
+  return {
+    type: ActionType.SEND_SEARCH_KEYS,
+    payload: value,
   };
 };

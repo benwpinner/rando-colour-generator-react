@@ -5,4 +5,5 @@ export enum ActionType {
   SAVE_LIKES_ERROR = 'save_likes_error',
   TOGGLE_LIKES_OPEN = 'toggle_likes_open',
   TOGGLE_SEARCH_ACTIVE = 'toggle_search_active',
+  SEND_SEARCH_KEYS = 'send_search_keys',
 }

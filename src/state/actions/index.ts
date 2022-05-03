@@ -34,10 +34,16 @@ export interface ToggleSearchActiveAction {
   type: ActionType.TOGGLE_SEARCH_ACTIVE;
 }
 
+export interface SendSearchKeysAction {
+  type: ActionType.SEND_SEARCH_KEYS;
+  payload: string;
+}
+
 export type Action =
   | SetColourAction
   | ToggleVariationAction
   | ToggleLikeColourAction
   | SaveLikesErrorAction
   | ToggleLikesOpenAction
-  | ToggleSearchActiveAction;
+  | ToggleSearchActiveAction
+  | SendSearchKeysAction;
