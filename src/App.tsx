@@ -1,5 +1,5 @@
 import './App.css';
-import { FormEventHandler, MouseEventHandler } from 'react';
+import { FormEventHandler, MouseEventHandler, useState } from 'react';
 import colourous from './colourous';
 import ntc from './nameThatColour';
 import Generator from './components/generator';
@@ -7,11 +7,26 @@ import Variations from './components/variations';
 import Likes from './components/likes';
 import { useTypedSelector } from './hooks/use-typed-selector';
 import { useActions } from './hooks/use-actions';
+import init, { generate_random_colour, convert_rgb_to_hex } from 'colourous';
 
 ntc.init();
 
 const App = () => {
   const { toggleLikeColour, setColour, toggleSearchActive } = useActions();
+  const [ wasmInit, setWasmInit ] = useState(false);
+
+  const textDecoder = new TextDecoder("utf-8");
+
+  if (!wasmInit) {
+    init().then(() => {
+      setWasmInit(true);
+    });
+  } else {
+    const rand_col = generate_random_colour();
+    console.log(rand_col);
+    console.log(textDecoder.decode(convert_rgb_to_hex(rand_col)));
+    console.log(convert_rgb_to_hex(rand_col));
+  }
 
   const likes = useTypedSelector((state) => state.likes.data);
   const colour = useTypedSelector((state) => state.colours.data.colour);
