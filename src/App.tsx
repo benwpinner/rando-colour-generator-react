@@ -7,7 +7,7 @@ import Variations from './components/variations';
 import Likes from './components/likes';
 import { useTypedSelector } from './hooks/use-typed-selector';
 import { useActions } from './hooks/use-actions';
-import init, { generate_random_colour, convert_rgb_to_hex } from 'colourous';
+import init, { generate_random_colour } from 'colourous';
 
 ntc.init();
 
@@ -22,10 +22,14 @@ const App = () => {
       setWasmInit(true);
     });
   } else {
-    const rand_col = generate_random_colour();
-    console.log(rand_col);
-    console.log(textDecoder.decode(convert_rgb_to_hex(rand_col)));
-    console.log(convert_rgb_to_hex(rand_col));
+    try {
+      
+      const rand_col = generate_random_colour();
+      console.log(rand_col.rgb);
+      console.log(textDecoder.decode(Uint8Array.from(rand_col.hex)));
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   const likes = useTypedSelector((state) => state.likes.data);

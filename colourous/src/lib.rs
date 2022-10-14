@@ -1,5 +1,13 @@
 use rand::{rngs::ThreadRng, thread_rng, Rng};
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
+
+#[derive(Deserialize, Serialize)]
+struct Colour {
+    rgb: Vec<u8>,
+    #[serde(with = "serde_bytes")]
+    hex: Vec<u8>,
+}
 
 fn random_int(min: u8, max: u8, rng: &mut ThreadRng) -> u8 {
     let int = rng.gen_range(min..max);
@@ -19,17 +27,19 @@ fn convert_decimal_to_hex(decimal: u8) -> Vec<u8> {
 }
 
 #[wasm_bindgen]
-pub fn generate_random_colour() -> Vec<u8> {
+pub fn generate_random_colour() -> Result<JsValue, JsValue> {
     let mut rng = thread_rng();
-    vec![
+    let rgb = vec![
         random_int(0, 255, &mut rng),
         random_int(0, 255, &mut rng),
         random_int(0, 255, &mut rng),
-    ]
+    ];
+    let hex = convert_rgb_to_hex(&rgb);
+    let colour = Colour { rgb: rgb, hex: hex };
+    Ok(serde_wasm_bindgen::to_value(&colour)?)
 }
 
-#[wasm_bindgen]
-pub fn convert_rgb_to_hex(rgb: Vec<u8>) -> Vec<u8> {
+fn convert_rgb_to_hex(rgb: &Vec<u8>) -> Vec<u8> {
     let mut hex = Vec::new();
     for i in 0..3 {
         let mut value = convert_decimal_to_hex(rgb[i]);
